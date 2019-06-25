@@ -16,6 +16,7 @@ echo "There is $((365 - $(date +%j))) days before new year"
 echo "There is $(((365 - $(date +%j))/7)) weeks before new year"
 
 # 判定nginx进程是否存在，若不存在则自动拉起进程
+# ps -ef | grep nginx | grep -v grep 筛选判断grep nginx是否存在
 nginx_process_num=$(ps -ef | grep nginx | grep -v grep | wc -l)
 if [ $nginx_process_num -eq 0 ];then
     sudo nginx
