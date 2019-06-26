@@ -201,7 +201,7 @@ insert into itpuxd4('5 10:30:30'); -- 过去5天10点30分30秒 5X24+10：30：3
 select * from itpuxd4;
 
 ```
-#### 3.2.5 year YYYY
+##### 3.2.5 year YYYY
 ```sql
 create table itpuxd5('y' year);
 insert into itpuxd5 values(1234); --error
@@ -209,3 +209,53 @@ insert into itpuxd5 values(2018);
 insert into itpuxd5 values(2016);
 select * from itpuxd5;
 ```
+
+#### 3.3 字符类型
+##### 3.3.1 char
+##### 3.3.2 varchar
+char 与 varchar之间的区别
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/mysql/char_varchar.png)
+```sql
+-- char (M),M表示字符固定长度，1ab，255字节
+-- 一直占4个字节 只能保存4个字节 多了就减
+create table itpuxz1 (c CHAR(255));
+insert into itpuxz1 values('Yes');
+insert into itpuxz1 values('No');
+insert into itpuxz1 values('Y '); -- 在查询时会自动把后面的空格删掉
+select * from itpuxz1;
+select c,LENGTH(c) from itpuxz1;
+
+-- varchar (M),M表示字符可变长度，65536字节，需要1~2字节来保存信息，超过255的长度就是用2个来保存
+-- 不够就加
+create table itpuxz2(c varchar(65535)); -- error
+create table itpuxz2(c varchar(21845)); -- error
+create table itpuxz2(c varchar(21844)); -- ok
+insert into itpuxz2 values('Yes');
+insert into itpuxz2 values('No');
+insert into itpuxz2 values('Y  '); -- 在查询时不会把后面的空格删掉
+insert into itpuxz2 values('  Y');
+select * from itpuxz2;
+select c,LENGTH(c) from itpuxz2;
+
+utf8：一个字符占用3个字节 65535/3 = 21845 (-1/-2) => 21844/21843 少一或者两个字节
+gbk：一个字符占用2个字节 65535/2 = 32767 (-1/-2) => 32766/32765
+
+最大长度是受最大行数65535字节和所使用字符集有关。
+
+```
+
+
+
+text 
+
+blob
+
+enum
+
+set
+
+
+
+
+
+
