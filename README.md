@@ -270,7 +270,32 @@ find /usr/local/etc/nginx -mtime -5 -name '*.conf'
 # -b 只返回二进制文件
 
 ```
+### grep 和 egrep
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/grep1.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/grep2.png)
+```shell
+## grep
+    grep server nginx.conf # 从nginx.conf文件中筛选出有server的字符
+    grep server -v nginx.conf # 从nginx.conf文件中筛选出不是server的字符
+    grep server -vi nginx.conf # v,i命令同时使用
 
+    grep -E "python|PYTHON" nginx.conf
+    grep -F "py.*" nginx.conf #F 查找字面意思
+
+    grep -r love # 文件夹下忽略大小写全部搜索
+
+    mkdir test1/test2/test3 -pv
+# 了解
+    -c 只输出匹配行的数量，不显示具体内容
+    -w 匹配整词
+    -x 匹配整行
+    -l 只列出匹配的文件名，不显示具体匹配行内容
+
+## grep 和 egrep的区别
+https://blog.51cto.com/mcmvp/1180951
+./grep_egrep_fgrep.md
+
+```
 
 
 
