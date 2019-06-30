@@ -297,7 +297,28 @@ https://blog.51cto.com/mcmvp/1180951
 
 ```
 
+### sed的工作模式
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/1.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/2.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/3.png)
 
+
+```shell
+# sed(Stream Editor),流编辑器。对标准或文件逐行处理
+
+# sed的选项
+sed 'p' sed.txt 文件数据每一行打印两边
+sed -n 'p' sed.txt 文件数据只打印一行
+sed -n '/python/p' sed.txt 只打印小写pthon
+sed -n -e '/python/p' -e '/PYTHON/p' sed.txt 执行两个匹配表达式
+
+sed -n -f edit.sed sed.txt
+sed -n -r '/python|PYTHON/p' sed.txt
+
+sed -n 's/love/like/g;p' sed.txt
+
+sed -n -i -r 's/love/like/g;p' sed.txt # 表达式前面加上-r
+```
 
 
 
