@@ -301,6 +301,8 @@ https://blog.51cto.com/mcmvp/1180951
 - ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/1.png)
 - ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/2.png)
 - ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/3.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/4.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/5.png)
 
 
 ```shell
@@ -318,6 +320,36 @@ sed -n -r '/python|PYTHON/p' sed.txt
 sed -n 's/love/like/g;p' sed.txt
 
 sed -n -i -r 's/love/like/g;p' sed.txt # 表达式前面加上-r
+
+
+# sed中的pattern
+1、LineNumber                       -- 直接指定行号
+    sed -n "17p" /etc/passwd  打印file文件的第17行
+2、StartLine，EndLine                   --  指定起始行号和结束行号
+    sed -n "10,20p" /etc/passwd   打印file文件的10到20行
+3、StartLine，+N                        -- 指定起始行号，然后后面N行
+    sed -n "10,+5p" /etc/passwd    打印file文件中从第10行开始，往后加5行的所有
+4、/pattern1/                           -- 正则表达式匹配的行
+    sed -n "/^root/p" /etc/passwd  打印file文件中以root开头的行
+5、/pattern1/,/pattern2/                -- 从匹配到pattern1的行，到匹配到pattern2
+    sed -n "/^ftp/,/^mail/p" /etc/passwd  打印file文件中第一个匹配到ftp开头的行
+6、LineNumber,/pattern1/                -- 从指定行号开始匹配，知道匹配到pattern1的
+    sed -n "4,/^hdfs/p" file            -- 打印file文件中第4行开始匹配，知道匹配到最后也要打印
+7、/pattern1/,LineNumber                -- 从pattern匹配的行开始，知道匹配到指定行
+    sed -n "/root/,10p" file            -- 打印file文件中匹配root的行，直到第10行结束
+
+# sed中的编辑命令
+cp /etc/passwd ./                       -- 把/etc/passwd的文件复制到当前文件夹
+sed -i '1d' passwd                      -- 删除文件passwd的第一行
+sed -i '1,3d' passwd                    -- 删除文件passwd的第一行到第三行
+sed -i '/\/sbin\/nologin/d' passwd      -- 删除文件passwd匹配到的 /sbin/nologin 所在行          
+sed -i '/^mail/','/^ftp/d' passwd
+sed -i '/\/bin\/bash/a canLogin' passwd -- 符合条件行后添加“canLogin”
+sed -i '/^hdfs/,/^yarn/i AAA' passwd    -- 符合条件行前添加“AAA”
+sed -i '/root/r list' passwd            -- 符合条件行后添加 list文件中的内容
+sed -n '/\/bin\/bash/w /abc.txt' passwd    -- 符合条件的行 被写入abc.txt 文件中 (如果不加-n会输出所有内容)
+
+
 ```
 
 
