@@ -349,14 +349,89 @@ sed -i '/^hdfs/,/^yarn/i AAA' passwd    -- 符合条件行前添加“AAA”
 sed -i '/root/r list' passwd            -- 符合条件行后添加 list文件中的内容
 sed -n '/\/bin\/bash/w /abc.txt' passwd    -- 符合条件的行 被写入abc.txt 文件中 (如果不加-n会输出所有内容)
 
+# 修改
+7、 s/pattern/string                    -- 查找并替换，查找符合pattern模式的字符串，将其替换为string 适配(一、二、三、四、五)
+ s/pattern/string/g                  --  全局查找并替换，查找符合pattern模式的字符串
+ s/pattern/string/2g                 -- 2g表示，同一行内，只替换前2个匹配的，剩下的不替换
+ s/pattern/string/ig                 -- 加i参数表示匹配时忽略大小写，g表示匹配到的全部替换
+
+ sed -i 's/root/Root/2g' passwd
+ sed -i 's/root/RooT/' passwd
+ sed -i 's/HADOOP/hadoop/2' str.txt
+ sed -i 's/hadoop/HADOOP/ig' str.txt
+ sed -n '/\/sbin\/nologin/=' passwd 只显示行号，不显示内容
+
+# 其他编辑命令
+8、=                                    --- 显示行号
+
+# 什么是反向引用？
+    &和\1                               引用模式匹配的整个串
+    sed "s/1...e/&r/g" file             在file中搜寻以1开头，然后跟两个任意字符，以结尾的字符串
+    sed "s/\(1...e\)/\1r/g" file        和上面实现一样的功能，使用\1代表搜寻到的字符串
+    上面两种方式实现了一样的功能，分别使用&和\1引用前面匹配到的整个字符串
+    两者区别在于&只能表示匹配到的完整字符串，只能引用整个字符串;而\1可以使用()对匹配到的字符串
+    例如：如果我们仅想要提黄匹配到的字符串的一部分，name必须使用\1这种方式。
+    查找test.txt文件中以1开头，紧接着跟两个任意字符，再接一个e的字符串。将找到的字符串中开头的
+    sed "s/1\(...e\)/L\1/g" test.txt
+
+    将hadoop改为hadAAp 
+    sed -i 's/had..p/HADOOP/g' str.txt  匹配所有以had开头，以p结尾的全局字符并替换成HADOOP
+    sed -i 's/had..p/&s/g' str.txt  匹配所有以had开头，以p结尾的全局字符并替换成 符合条件字符加上s
+    sed -i 's/\(had..ps\)/\1o/g'    等价上方表达式
+
+    sed -i 's/\(had\)...../\1doop/g' str.txt    匹配had后面五个任意字符的字符串并将匹配到的这五个字符替换为doop
+
+# sed 中引用变量时注意事项
+1）匹配模式中存在变量，则建议使用双引号 exapmle.sh
+2）sed中需要引入自定义变量时，如果外面使用单引号，则自定义变量也必须使用单引号
+
+# 利用sed查询特定内容
+
+pattern 种类：
+    1、8p
+    2、8,10p
+    3、8,+5p
+    4、/regexp/p
+    5、/regexp_1/,/regexp_2/p
+    6、8,/reg/p
+    7、/reg/,8p
+
+- 1、 打印file第20行内容
+sed -n '20p' file
+- 2、打印filezhong从第8行开始，到第15行结束的内容
+sed -n '8,15p' file
+- 3、打印file中从第8行开始，然后+5行的内容
+sed -n '8,+5p' file
+- 4、打印file中开头匹配hdfs字符串的内容
+sed -n '/^hdfs/p' file
+- 5、打印file中开头为root的行开始，到开头为hdfs的行结束的内容
+sed -n '/^root/,/^hdfs/p' file
+- 6、打印file中第8行开始，到含有/sbin/nologin的内容的行结束内容
+sed -n '8,/\/sbin\/nologin/p' file
+- 7、打印/etc/passwd中第一个包含/bin/bash内容的行开始，到第5行结束的内容
+sed -n '/\/bin\/bash/,5p' /etc/passwd
+```
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/6.png)
+### 脚本编写 
+example/sed mysql_process.sh
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/7.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/8.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/9.png)
+
+### 利用sed删除特定内容
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/10.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/11.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/12.png)
+
+### 利用sed修改文件内容
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/13.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/14.png)
+
+### 利用sed追加文件内容
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/15.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/16.png)
+
+```shell
+
 
 ```
-
-
-
-
-
-
-
-
-
