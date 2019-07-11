@@ -431,7 +431,155 @@ example/sed mysql_process.sh
 - ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/15.png)
 - ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/sed/16.png)
 
-```shell
+### awk工作模式介绍
+awk又叫做报告生成器,是一个文本从处理工具，通常用于处理数据并生成结果报告。由创始人Alfred Aho、Peter Weinberger和Brian Kernighan 姓氏的首个字母组成。
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/1.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/2.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/3.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/4.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/5.png) 
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/6.png)
 
+```shell
+#awk内置变量
+$0:一行，$1:冒号分隔的第一个 (root:x:0:0:root:/root:/bin/bash)
+awk '{print $0}' ./str.txt
+awk 'BEGIN{FS=":"}{print $1}' ./str.txt
+awk '{print $1}' ./str.txt
+awk '{print NF}' ./str.txt
+awk '{print NR}' ./str.txt
+awk '{print FNR}' ./str.txt ./list
+awk 'BEGIN{FS="|"}{print $2}' ./list
+awk 'BEGIN{FS=":"}{print $2}' ./list
+awk 'BEGIN{FS=":";RS="---"}{print $2}' ./list
+awk 'BEGIN{RS="---"}{print $0}' ./list
+awk 'BEGIN{RS="--";FS="|"}{print $3}' ./list
+awk 'BEGIN{RS="--";FS="|";ORS="&"}{print $3}' ./list
+awk 'BEGIN{RS="--";FS="|";ORS="&"}{print $1,$3}' ./list
+awk 'BEGIN{RS="--";FS="|";ORS="&"}{print $1 $3}' ./list
+awk 'BEGIN{RS="--";FS="|";ORS="&";OFS=":"}{print $1,$3}' ./list
+awk 'BEGIN{RS="--";FS="|";ORS="&";OFS="@@"}{print $1,$3}' ./list
+awk '{print ARGC}' list
+```
+### awk格式化输出之printf
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/7.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/8.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/9.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/10.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/11.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/12.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/13.png)
+
+```shell
+awk 'BEGIN{FS=":"}{printf "%20s %20s\n",$1,$7}' ./list
+# 匹配/etc/passwd文件中含有root字符串的所有行
+awk 'BEGIN{FS=":"}/root/{print $0}' /etc/passwd
+# 匹配/etc/passwd文件中以yarn开头的所有行
+awk 'BEGIN{FS=":"}/^yarn/{print $0}' /etc/passwd
 
 ```
+
+### awk动作表达式算数运算法
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/14.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/15.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/16.png)
+```shell
+# 使用awk计算/etc/services中的空白行数量
+awk '/^$/{sum++}END{print sum}' ./example.sh
+
+# 计算学生课程分数平均值，学生课程文件内容如下：
+awk '{total=$2+$3+$4+$5;AVG=total/4;printf "%-8s%-5d%-5d%-5d%-8d%0.2f\n",$1,$2,$3,$4,$5,AVG}' ./student.txt
+awk 'BEGIN{printf "%-8s%-8s%-8s%-8s%-8s%s\n","Name","Yuwen","Math","Englist","Pysical","Average"}{total=$2+$3+$4+$5;AVG=total/4;printf "%-8s%-8d%-8d%-8d%-8d%0.2f\n",$1,$2,$3,$4,$5,AVG}' ./student.txt
+
+# 使用awk输出/etc/passwd文件行数。分两种方式显示行数，一种是正序如1，2，3，4
+
+```
+### awk动作中的条件及循环语句
+```shell
+awk 'BEGIN{FS=":"}{if($3>50) print $0}' /etc/passwd
+awk 'BEGIN{FS=":"}{if($3>50 && $3<100>) print $0}' /etc/passwd
+awk 'BEGIN{FS=":"}{if($3>50 || $3<100>) print $0}' /etc/passwd
+awk 'BEGIN{FS=":"}{if($3<50) printf "%s%d\n","小于50的UID",$3}' /etc/passwd
+awk 'BEGIN{FS=":"}{if($3<50) printf "%-10s%-5d\n","小于50的UID",$3}' /etc/passwd
+awk 'BEGIN{FS=":"}{if($3<50) printf "%-10s%-10s%-5d\n","小于50的UID",$1,$3}' /etc/passwd
+awk 'BEGIN{FS=":"}{if($3<50) printf "%-10s%-10s%-5d\n","小于50的UID",$1,$3} else if($3>50 && $3<100){...}else{...}' /etc/passwd
+awk -f script.awk /etc/passwd
+awk -f while.awk
+awk -f form.awk student.txt
+```
+### awk中的字符串函数
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/17.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/18.png)
+
+```shell
+# 1，以：为分隔符，返回/etc/passwd中每行中每个字段的长度
+root:x:0:0:root:/root:/bin/bash
+4:1:1:1:4:5:9
+awk -f check_len.awk /etc/passwd
+# 2,搜索字符串“I have a dream”中出现“ea”字符串的位置
+awk 'BEGIN{str="I hava a dream";location=index(str,"ea");print location}'
+awk 'BEGIN{str="I hava a dream";location=match(str,"ea");print location}'
+# 3,将字符串“Hadoop is a bigdata Framaword”全部转换为小写、大写
+awk 'BEGIN{str="Hadoop is a bigdata Framework";print tolower(str);print toupper(str)}'
+# 5,将字符串“Hadoop Kafka Spark Storm HDFS YARN Zookeeper”,按照空格分隔符，分隔每部分保存到数组array中
+awk 'BEGIN{str="Hadoop Kafka Spark Storm HDFS YARN Zookeeper";split(str,arr);for(a in arr) print arr[a]}'
+# 6,搜索字符串“Tranction 2345 Start:Select * from master”第一个数字出现的位置
+awk 'BEGIN{str="Tranction 2345 Start:Select * from master";location=match(str,/[0-9]/);print location}'
+# 7,截取字符串“transaction start”的子串，截取条件从第4个字符开始，截取5位
+awk 'BEGIN{str="transaction start";print substr(str,4,5)}'
+awk 'BEGIN{str="transaction start";print substr(str,4)}'
+# 8,替换字符串“Tranction 243 Start,Event ID:9002”中第一个匹配到的数字串为$符号
+awk 'BEGIN{str="Tranction 243 Start,Event ID:9002";count=sub(/[0-9]+/,"$",str);print count,str}'
+awk 'BEGIN{str="Tranction 243 Start,Event ID:9002";count=gsub(/[0-9]+/,"$",str);print count,str}'
+
+```
+### awk中的常用选项
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/19.png)
+```shell
+num1=20
+var="hello world"
+awk -v num2=$num1 -v var1="$var" 'BEGIN{print num2,var1}' #20 hello world
+```
+### awk中数组的用法
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/20.png)
+```shell
+array=("Allen" "Mike" "Messi" "Jerry" "Hanmeimei" "Wang")
+echo ${array[2]}
+echo ${array[0]}
+echo ${#array[@]}
+echo ${#array[*]}
+str="test string"
+echo $str
+echo ${#str}
+echo ${#array[4]}
+array[1]="Jerry"
+echo ${array[1]}
+echo ${array[@]}
+
+unset array[0]
+echo ${array[*]}
+echo ${array[@]}
+
+echo ${array[@]:1:3}
+echo ${array[@]:1}
+echo ${array[@]/e/E}
+
+for a in ${array[@]};do echo $a;done
+
+```
+###需求描述，利用awk处理日志，并生成结果报告
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/21.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/22.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/23.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/24.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/25.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/26.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/27.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/28.png)
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/awk/29.png)
+> record_len.awk
+
+
+
+
+

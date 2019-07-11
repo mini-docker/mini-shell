@@ -1,2 +1,7 @@
 First Line (XXXXX)
 Second Line (YYYYY)
+Hadoop|Spark:Flume
+Java|Python:Scala:Go
+Allen|Mike:Meggie
+Hadoop|Spark|Flume---Java|Python|Scala|Go---Allen|Mike|Meggie
+Hadoop|Spark|Flume--Java|Python|Scala|Go--Allen|Mike|Meggie
