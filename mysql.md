@@ -257,5 +257,23 @@ set
 
 
 
+### shell脚本与MySQL
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/mysql/002.png)
+```shell
+# 去掉列信息 不显示"-"字符
+mysql -udbuser -p123456 -h127.0.0.1 -D -N (-E/-H) -B school -e "SELECT * FROM student;"
+
+# 将所得sql结果保存进入html
+mysql -udbuser -p123456 -h127.0.0.1 -D -N -H -B school -e "SELECT * FROM student;" > result.html
+mysql -udbuser -p123456 -h127.0.0.1 -D -N -X -B school -e "SELECT * FROM student;" > result.xml
+
+# 该脚本可以接受2个参数，参数为需要执行的SQL语句
+sh operate_mysql.sh school "SELECT * FROM student"
+mysql -udbuser -p123456 -h192.168.184.132 -D school -N -X -B -e "SELECT * FROM student;"
+
+# 如何将文本中格式化的数据导入到MySQL数据库中？
+```
+> /sh-mysql/ftp.sh
+- ![流程图](https://github.com/mini-docker/mini-shell/blob/master/img/mysql/003.png)
 
 

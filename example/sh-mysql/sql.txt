@@ -1,0 +1,15 @@
+1011 jerry 1991-12-13 male
+1012 mike 1991-12-13 female
+1013 tracy 1991-12-13 male
+1014 kobe 1991-12-13 male
+1015 allen 1991-12-13 male
+1016 curry 1991-12-13 female
+1017 tom 1991-12-13 male
+
+1011 || jerry || 1991-12-13 || male
+1012 || mike || 1991-12-13 || female
+1013 || tracy || 1991-12-13 || male
+1014 || kobe || 1991-12-13 || male
+1015 || allen || 1991-12-13 || male
+1016 || curry || 1991-12-13 || female
+1017 || tom || 1991-12-13 || male
